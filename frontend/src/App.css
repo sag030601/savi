@@ -1,0 +1,16 @@
+/* slick-carousel default styles */
+
+
+/* Custom styles for slick arrows */
+.slick-prev:before,
+.slick-next:before {
+  font-size: 30px;
+  color: #1976d2;
+  /* Primary color */
+}
+
+* {
+  padding: 0 2vw;
+  margin: 0;
+  box-sizing: border-box;
+}
