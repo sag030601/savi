@@ -19,7 +19,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Route 1: Create a New User (SignUp)
-router.post("/register", async (req, res) => {
+router.post("/registers", async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: "All fields are required" });
