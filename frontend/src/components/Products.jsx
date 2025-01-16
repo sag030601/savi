@@ -1,48 +1,38 @@
-import React from "react";
-import {
-  Box,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-  Rating,
-} from "@mui/material";
-
-const products = [
-  {
-    id: 1,
-    name: "Product A",
-    image: "https://via.placeholder.com/300x200",
-    price: "$50",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    name: "Product B",
-    image: "https://via.placeholder.com/300x200",
-    price: "$75",
-    rating: 4.2,
-  },
-  {
-    id: 3,
-    name: "Product C",
-    image: "https://via.placeholder.com/300x200",
-    price: "$100",
-    rating: 4.8,
-  },
-  {
-    id: 4,
-    name: "Product D",
-    image: "https://via.placeholder.com/300x200",
-    price: "$120",
-    rating: 4.7,
-  },
-];
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Card, CardMedia, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/photos/random?query=fashion-model&count=4&client_id=${JALsqDXpy4VUVDBpn8CZdjVu_FmCw6T_snPEDsC1FFc}`
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        const productData = data.map((item, index) => ({
+          id: index + 1,
+          name: `Product ${String.fromCharCode(65 + index)}`,
+          image: item.urls.regular,
+          price: `$${(50 + index * 25).toFixed(2)}`,
+          rating: (Math.random() * (5 - 3.5) + 3.5).toFixed(1),
+        }));
+        setProducts(productData);
+      } else {
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+  
+
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography
@@ -64,66 +54,31 @@ const Products = () => {
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                 transition: "transform 0.3s",
                 "&:hover": { transform: "scale(1.05)" },
+                cursor: "pointer",
               }}
+              onClick={() => navigate(`/product/${product.id}`)}
             >
               <CardMedia
                 component="img"
                 alt={product.name}
-                height="200"
+                height="350"
                 image={product.image}
                 sx={{ borderRadius: "8px 8px 0 0" }}
               />
-              <CardContent>
+              <Box sx={{ padding: "10px" }}>
                 <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", textAlign: "center" }}
+                  variant="subtitle1"
+                  sx={{ fontWeight: "bold", color: "gray" }}
                 >
                   {product.name}
                 </Typography>
                 <Typography
                   variant="subtitle1"
-                  sx={{ color: "gray", textAlign: "center", margin: "8px 0" }}
+                  sx={{ fontWeight: "bold", color: "gray" }}
                 >
                   {product.price}
                 </Typography>
-                <Rating
-                  value={product.rating}
-                  precision={0.1}
-                  readOnly
-                  size="small"
-                  sx={{ display: "flex", justifyContent: "center" }}
-                />
-              </CardContent>
-              <CardActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "0 16px 16px",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    borderRadius: 2,
-                  }}
-                >
-                  Buy Now
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    borderRadius: 2,
-                  }}
-                >
-                  Add to Cart
-                </Button>
-              </CardActions>
+              </Box>
             </Card>
           </Grid>
         ))}

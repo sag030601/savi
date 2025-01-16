@@ -37,7 +37,8 @@ const Navbar = () => {
         // boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
         // padding: '0 20px',
         boxShadow: 'none',
-        width:'100%'
+        width:'80%',
+        margin:' 0 auto'
 
       }}
     >

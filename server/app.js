@@ -29,13 +29,26 @@ app.use(cors());
 
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log(`Connected to MongoDB database: ${mongoose.connection.name}`))
-  .catch((err) => console.error('Error connecting to MongoDB:', err));
+// mongoose
+//   .connect(process.env.MONGO_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log(`Connected to MongoDB database: ${mongoose.connection.name}`))
+//   .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+
+const sequelize = require('./db'); // Import Sequelize instance
+const User = require('./models/userModel'); // Import your models
+
+(async () => {
+  try {
+    await sequelize.sync({ alter: true }); // Use `alter: true` to sync changes without dropping data
+    console.log('Database synchronized successfully.');
+  } catch (error) {
+    console.error('Error synchronizing the database:', error);
+  }
+})();
 
 
 // Start server
